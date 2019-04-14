@@ -11,6 +11,7 @@ const serializeArticle = article => ({
   title: xss(article.title),
   content: xss(article.content),
   date_published: article.date_published,
+  author:article.author
 })
 articlesRouter
   .route('/')
@@ -25,7 +26,7 @@ articlesRouter
 
 
   .post(jsonParser, (req, res, next) => {
-    const { title, content, style } = req.body
+    const { title, content, style,author } = req.body
     // title = xss(title)
     // content = xss(title)
     // console.log(title,content,'test content and title xss')
@@ -38,6 +39,7 @@ articlesRouter
         return res.status(400).json({
           error: { message: `Missing '${key}' in request body` }
         })
+        newArticle.author = author
     ArticlesService.insertArticle(
       req.app.get('db'),
       newArticle
